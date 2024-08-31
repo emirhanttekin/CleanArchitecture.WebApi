@@ -3,42 +3,40 @@ using CleanArchitecture.Domain.Entities; // Car entity'si için gerekli using if
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
-namespace CleanArchitecture.Persistance.Context
+namespace CleanArchitecture.Persistance.Context;
+
+public sealed class AppDbContext : IdentityDbContext<User, IdentityRole, string>
 {
-    public sealed class AppDbContext : IdentityDbContext<User, IdentityRole , string>
+    public AppDbContext(DbContextOptions options) : base(options) { }
+
+    // DbSet tanımlaması - Car tablosunun veritabanında oluşturulmasını sağlar
+    public DbSet<Car> Cars { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        public AppDbContext(DbContextOptions options) : base(options) { }
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(AssemblyReference).Assembly);
+        modelBuilder.Ignore<IdentityUserLogin<string>>();
+        modelBuilder.Ignore<IdentityUserRole<string>>();
+        modelBuilder.Ignore<IdentityUserClaim<string>>();
+        modelBuilder.Ignore<IdentityUserToken<string>>();
+        modelBuilder.Ignore<IdentityRoleClaim<string>>();
+        modelBuilder.Ignore<IdentityRole<string>>();
+    }
 
-        // DbSet tanımlaması - Car tablosunun veritabanında oluşturulmasını sağlar
-        public DbSet<Car> Cars { get; set; }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var entires = ChangeTracker.Entries<Entity>();
+        foreach (var entry in entires)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AssemblyReference).Assembly);
-            modelBuilder.Ignore<IdentityUserLogin<string>>();
-            modelBuilder.Ignore<IdentityUserRole<string>>();
-            modelBuilder.Ignore<IdentityUserClaim<string>>();
-            modelBuilder.Ignore<IdentityUserToken<string>>();
-            modelBuilder.Ignore<IdentityRoleClaim<string>>();
-            modelBuilder.Ignore<IdentityRole<string>>();
-        }
+            if (entry.State == EntityState.Added)
+                entry.Property(p => p.CreatedDate)
+                    .CurrentValue = DateTime.Now;
 
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            var entires = ChangeTracker.Entries<Entity>();
-            foreach (var entry in entires)
-            {
-                if (entry.State == EntityState.Added)
-                    entry.Property(p => p.CreatedDate)
-                        .CurrentValue = DateTime.Now;
-
-                if (entry.State == EntityState.Modified)
-                    entry.Property(p => p.UpdatedDate)
-                        .CurrentValue = DateTime.Now;
-            }
-            return base.SaveChangesAsync(cancellationToken);
+            if (entry.State == EntityState.Modified)
+                entry.Property(p => p.UpdatedDate)
+                    .CurrentValue = DateTime.Now;
         }
+        return base.SaveChangesAsync(cancellationToken);
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Reflection;
 
-namespace CleanArchitecture.Presentation
+namespace CleanArchitecture.Presentation;
+
+public static class AssamblyReference
 {
-    public static class AssamblyReference
-    {
-        public static readonly Assembly assembly = typeof(Assembly).Assembly;
-    }
+    public static readonly Assembly assembly = typeof(Assembly).Assembly;
 }

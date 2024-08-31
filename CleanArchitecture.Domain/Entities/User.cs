@@ -1,17 +1,17 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace CleanArchitecture.Domain.Entities
+namespace CleanArchitecture.Domain.Entities;
+
+public sealed class User : IdentityUser<string>
 {
-    public sealed class User : IdentityUser<string>
+    public User()
     {
-        public User()
-        {
 
-            Id = Guid.NewGuid().ToString();
-
-        }
-
-        public string NameLastName { get; set; }
+        Id = Guid.NewGuid().ToString();
 
     }
+
+    public string NameLastName { get; set; }
+
 }
+

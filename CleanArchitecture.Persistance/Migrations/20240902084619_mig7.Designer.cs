@@ -4,6 +4,7 @@ using CleanArchitecture.Persistance.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CleanArchitecture.Persistance.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240902084619_mig7")]
+    partial class mig7
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,64 +24,6 @@ namespace CleanArchitecture.Persistance.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("CleanArchitecture.Domain.Entities.Car", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("EnginePower")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Model")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("Name");
-
-                    b.ToTable("Cars", (string)null);
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Domain.Entities.ErrorLog", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ErrorMessage")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RequestMethod")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("RequestPath")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("StackTrace")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Timestamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ErrorLogs", (string)null);
-                });
 
             modelBuilder.Entity("CleanArchitecture.Domain.Entities.Role", b =>
                 {
@@ -158,47 +103,6 @@ namespace CleanArchitecture.Persistance.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Domain.Entities.UserRole", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RoleId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserRoles", (string)null);
-                });
-
-            modelBuilder.Entity("CleanArchitecture.Domain.Entities.UserRole", b =>
-                {
-                    b.HasOne("CleanArchitecture.Domain.Entities.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId");
-
-                    b.HasOne("CleanArchitecture.Domain.Entities.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
-                    b.Navigation("Role");
-
-                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }

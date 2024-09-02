@@ -25,7 +25,9 @@ public sealed class JwtProvider : IJwtProvider
     public async Task<LoginCommandResponse> CreateTokenAsync(User user)
     {
         var claims = new Claim[]
+
         {
+            new Claim(ClaimTypes.NameIdentifier , user.Id),
             new Claim(ClaimTypes.Email , user.Email),
             new Claim(JwtRegisteredClaimNames.Name, user.UserName),
             new Claim("NameLastName" , user.NameLastName) //özel keyli claim oluşturduk burdaki satırda

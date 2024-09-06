@@ -9,6 +9,7 @@ public sealed class MappingProfile : Profile
 {
     public MappingProfile()
     {
+
         CreateMap<CreateCarCommand, Car>();
         CreateMap<RegisterCommand, User>();
 
